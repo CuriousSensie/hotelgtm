@@ -2,6 +2,9 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "hotelgtm-site",
   "compatibility_date": "2026-11-01",
-  "pages_build_output_dir": "./out",
-  "previews": {}
+  // Static Next.js export served via Workers Static Assets (no Worker script).
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
 }

@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "preview": "pnpm build && wrangler pages dev",
-    "deploy": "pnpm build && wrangler pages deploy"
+    "preview": "pnpm build && wrangler dev",
+    "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
     "lucide-react": "^1.72.0",
