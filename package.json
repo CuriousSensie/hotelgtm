@@ -27,5 +27,9 @@
     "tailwindcss": "^4.3.5",
     "typescript": "~5.9.3",
     "wrangler": "^4.161.0"
+  },
+  "packageManager": "pnpm@11.5.1",
+  "engines": {
+    "node": ">=22"
   }
 }
