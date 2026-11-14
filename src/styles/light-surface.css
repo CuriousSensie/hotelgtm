@@ -1,0 +1,104 @@
+/* A lighter, more welcoming surface across the HotelGTM site. Loaded last: overrides earlier surfaces. */
+
+:root {
+  --background: 48 38% 98%;
+  --foreground: 154 22% 18%;
+  --border: 82 16% 88%;
+  --input: 82 16% 88%;
+  --card: 48 45% 99%;
+  --card-foreground: 154 22% 18%;
+  --popover: 48 45% 99%;
+  --popover-foreground: 154 22% 18%;
+  --secondary: 86 18% 94%;
+  --secondary-foreground: 154 22% 18%;
+  --muted: 86 18% 94%;
+  --muted-foreground: 154 9% 40%;
+}
+
+body,
+.site-shell { background: #fbfaf6; color: #263a30; }
+.topbar { background: #fffdf9; border-color: #e7e8df; }
+.nav-links { color: #526357; }
+.nav-contact { border-radius: 7px; }
+.nav-dropdown-menu { background: #fffdf9; border-color: #e3e7de; border-radius: 10px; }
+.nav-dropdown-menu a:hover { background: #f1f5ee; }
+.eyebrow, .service-number, .step-index, .contact-guidance-list article > span { color: #8b7136; }
+.button-primary { border-radius: 7px; }
+
+.hero, .service-hero, .company-hero, .contact-hero, .editorial-preview { background: #fbfaf6; }
+.service-hero { border-color: #e5e8df; padding-top: 48px; padding-bottom: 86px; }
+.service-hero-aside {
+  background: #f0f4ed;
+  border-color: #e0e7dc;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(36, 67, 55, .055);
+}
+.service-hero-aside strong { color: #3a5b49; }
+.service-hero-aside::after { border-color: #b89a4e44; }
+.service-detail-section,
+.company-scope,
+.contact-guidance,
+.audience-directory,
+.use-cases-hero,
+.audience-home,
+.method-band,
+.company-aside,
+.pricing-scope,
+.credit-guide { background: #f1f4ee; }
+.service-detail-section { padding-top: 100px; padding-bottom: 106px; }
+.detail-list { border-color: #dce4d9; }
+.detail-row { padding-top: 29px; padding-bottom: 31px; border-color: #dce4d9; }
+.detail-row h3, .audience-row h3 { color: #2e493b; }
+.detail-row p, .audience-row p { font-size: 13px; line-height: 1.8; color: #58685b; }
+.detail-row li { font-size: 12px; color: #5d6b5f; }
+.related-section { padding-top: 94px; padding-bottom: 100px; background: #fffdf9; }
+.related-grid { gap: 14px; border: 0; }
+.related-card, .related-card + .related-card {
+  min-height: 175px;
+  padding: 25px;
+  border: 1px solid #e5e9e0;
+  border-radius: 12px;
+  background: #fbfaf6;
+  transition: color .2s, background .2s, border-color .2s, transform .2s;
+}
+.related-card:hover {
+  background: #f1f5ee;
+  border-color: #cfdacb;
+  transform: translateY(-2px);
+}
+.related-card > span { color: #2e493b; }
+.related-card p { font-size: 12px; }
+.related-card:last-child { border-right: 1px solid #e5e9e0; }
+
+.proof-strip, .offer-dark, .company-audience, .pricing-plan-featured,
+.pricing-advisory-grid .pricing-tier-featured { background: #3b5a4b; }
+.offer-dark .service-grid { border-color: #708779; }
+.offer-dark .service + .service { border-color: #708779; }
+.company-audience-grid { border-color: #708779; }
+.company-audience-grid article + article { border-color: #708779; }
+.pricing-advisory-grid .pricing-tier-featured + .pricing-tier { border-color: #e0e5db; }
+.contact-band {
+  background: #edf3eb;
+  color: #263a30;
+  border-top: 1px solid #e1e8de;
+}
+.contact-band p { color: #596a5d; }
+.contact-band .eyebrow { color: #8b7136; }
+.contact-band .button-primary { background: #355847; color: #fbfaf6; }
+.contact-band .button-primary:hover { background: #426b57; }
+.footer { background: #fffdf9; border-color: #e5e8df; }
+
+@media (max-width: 760px) {
+  .nav-links { background: #fffdf9; border-color: #e5e8df; }
+  .service-hero { padding-top: 30px; padding-bottom: 58px; }
+  .service-hero-aside { border-radius: 14px; }
+  .service-detail-section { padding-top: 65px; padding-bottom: 70px; }
+  .related-section { padding-top: 65px; padding-bottom: 70px; }
+  .related-grid { gap: 11px; }
+  .related-card, .related-card + .related-card {
+    min-height: 0;
+    padding: 21px;
+    border: 1px solid #e5e9e0;
+    border-radius: 11px;
+  }
+}

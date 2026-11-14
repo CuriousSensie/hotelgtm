@@ -1,0 +1,11 @@
+# Supply-chain guard (mirrors the Replit workspace policy): only install versions published 24h+ ago.
+minimumReleaseAge: 1440
+
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+
+# Native binaries required by wrangler (Cloudflare CLI).
+allowBuilds:
+  esbuild: true
+  workerd: true
