@@ -15,6 +15,12 @@
 @import '../styles/responsive.css';
 @import '../styles/identity.css';
 @import '../styles/light-surface.css';
+@import '../styles/landing.css';
+@import '../styles/pages-detail.css';
+@import '../styles/pages-company.css';
+@import '../styles/pages-insights.css';
+/* Responsive layer: must stay last. */
+@import '../styles/mobile.css';
 
 /* Tailwind theme mapped onto the site tokens (used by utility-styled pages such as 404/error). */
 @theme inline {
