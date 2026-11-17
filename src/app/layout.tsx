@@ -8,11 +8,12 @@ import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_ORIGIN } from '@/li
 import './globals.css';
 
 /*
+ * Only the families and weights that actually render (Playfair is the logo's "H" only).
  * Loaded from the Google Fonts CSS API (not next/font): Google serves browser-specific font builds,
  * and next/font fetches with a fixed legacy user agent, which yields slightly different glyph metrics.
  */
 const GOOGLE_FONTS_URL =
-  'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap';
+  'https://fonts.googleapis.com/css2?family=Funnel+Display:wght@500&family=Funnel+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Playfair+Display:wght@600&display=swap';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
@@ -23,7 +24,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
   themeColor: '#f3f0e7',
 };
 
@@ -32,7 +32,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: SITE_NAME,
   description:
-    'Specialist hospitality commercial intelligence and execution partner for B2B companies selling into hotels, combining verified hotel ownership and management contact data with tailored GTM strategy and pipeline setup.',
+    'Hotel ownership and management data, go-to-market playbooks and pipeline execution for B2B companies selling into hotels.',
   url: `${SITE_ORIGIN}/`,
   parentOrganization: { '@type': 'Organization', name: 'Hospitality Growth Advisors, LLC' },
 };

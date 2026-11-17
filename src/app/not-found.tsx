@@ -1,15 +1,15 @@
-import { CircleAlert } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md mx-4 rounded-xl border bg-card text-card-foreground shadow">
-        <div className="p-6">
-          <div className="flex mb-4 gap-2">
-            <CircleAlert className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
-          </div>
-          <p className="mt-4 text-sm text-gray-600">Did you forget to add the page to the router?</p>
+    <div className="lp in-screen">
+      <div className="in-screen-card lp-rise">
+        <span className="lp-eyebrow">Error 404</span>
+        <h1>Page not found</h1>
+        <p>This page doesn’t exist or has moved.</p>
+        <div className="in-screen-actions">
+          <Link href="/" className="lp-button">Back to home <ArrowRight size={15} /></Link>
         </div>
       </div>
     </div>

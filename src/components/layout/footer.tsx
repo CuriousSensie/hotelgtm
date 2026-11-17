@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <Brand />
-      <span>Verified hotel ownership intelligence, GTM strategy and pipeline execution.</span>
+      <span>Hotel ownership data and go-to-market for B2B teams selling into hotels.</span>
       <nav className="footer-links" aria-label="Footer navigation">
         {footerLinks.map((link) => (
           <Link key={link.href} href={link.href}>{link.label}</Link>

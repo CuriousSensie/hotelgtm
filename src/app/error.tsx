@@ -1,5 +1,6 @@
 'use client';
 
+import { RotateCw } from 'lucide-react';
 import { useEffect } from 'react';
 
 type ErrorProps = { error: Error & { digest?: string }; reset: () => void };
@@ -10,17 +11,19 @@ export default function RouteError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 p-6">
-      <div className="max-w-lg w-full text-center">
-        <h1 className="text-xl font-semibold text-gray-900">Something went wrong</h1>
-        <p className="mt-2 text-sm text-gray-600">This part of the app hit an error. The rest of the app is still running.</p>
+    <div className="lp in-screen">
+      <div className="in-screen-card lp-rise">
+        <h1>Something went wrong</h1>
+        <p>This page failed to load. Try again, or come back in a moment.</p>
         {/* Dev only: messages can carry internals. */}
         {process.env.NODE_ENV === 'development' ? (
-          <pre className="mt-4 overflow-x-auto rounded bg-gray-100 p-3 text-left text-xs text-gray-800">{error.message || String(error)}</pre>
+          <pre className="in-screen-trace">{error.message || String(error)}</pre>
         ) : null}
-        <button type="button" onClick={reset} className="mt-4 rounded bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700">
-          Try again
-        </button>
+        <div className="in-screen-actions">
+          <button type="button" onClick={reset} className="lp-button in-screen-button">
+            Try again <RotateCw size={15} />
+          </button>
+        </div>
       </div>
     </div>
   );

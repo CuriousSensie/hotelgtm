@@ -6,61 +6,15 @@
   .nav-links { display: none; position: absolute; top: 67px; left: 0; right: 0; background: #f3f0e7; padding: 20px 24px 25px; border-bottom: 1px solid #d5cdb9; flex-direction: column; align-items: stretch; gap: 18px; }
   .nav-links.open { display: flex; }
   .nav-contact { text-align: center; }
-  .pricing-hero { padding-top: 30px; padding-bottom: 45px; }
-  .pricing-hero .breadcrumbs { margin-bottom: 35px; }
-  .pricing-intro h1 { font-size: clamp(45px, 13vw, 68px); }
-  .pricing-plans { grid-template-columns: 1fr; padding-bottom: 55px; }
-  .pricing-plan { min-height: 0; padding: 24px; }
-  .pricing-plan .button-primary { margin-top: 8px; }
-  .pricing-model { padding: 0 22px 55px; }
-  .pricing-section-heading { display: block; padding-bottom: 18px; }
-  .pricing-section-heading > p { margin-top: 14px; }
-  .pricing-tier-grid { grid-template-columns: 1fr; }
-  .pricing-tier, .pricing-tier + .pricing-tier { padding: 21px 0; border-left: 0; border-bottom: 1px solid #d5cdb9; min-height: 0; }
-  .pricing-tier:last-child { border-bottom: 0; }
-  .pricing-tier h3 { margin-top: 8px; }
-  .pricing-tier .pricing-price { margin-bottom: 16px; }
-  .pricing-advisory-grid .pricing-tier-featured, .pricing-advisory-grid .pricing-tier-featured + .pricing-tier { padding: 21px 18px; }
-  .pricing-advisory-grid .pricing-tier-featured { border-bottom: 0; }
-  .credit-guide { grid-template-columns: 1fr; gap: 20px; padding: 23px 20px; }
-  .credit-guide ul { grid-template-columns: 1fr; }
-  .credit-guide li, .credit-guide li:first-child { padding: 13px 0; border-left: 0; border-top: 1px solid #cfc7b5; }
-  .credit-guide li:first-child { border-top: 0; }
-  .advisory-includes ul { display: grid; gap: 12px; }
-  .pricing-scope { padding-top: 50px; padding-bottom: 55px; }
   .hero { grid-template-columns: 1fr; padding-top: 64px; padding-bottom: 54px; gap: 15px; }
   .hero h1 { font-size: clamp(48px, 14vw, 70px); }
-  .hero-art { min-height: 330px; }
-  .map-grid { width: min(340px, 85vw); }
-  .map-card { left: 0; }
-  .hero-index { display: none; }
-  .proof-strip { align-items: flex-start; flex-direction: column; }
-  .proof-list { flex-wrap: wrap; }
   .section { padding-top: 68px; padding-bottom: 68px; }
-  .section-heading { display: block; }
-  .section-heading p { margin-top: 18px; }
-  .service-grid { grid-template-columns: 1fr; }
   .service, .service + .service { border-left: 0; border-bottom: 1px solid #d5cdb9; padding: 24px 0; min-height: 0; }
   .service:last-child { border-bottom: 0; }
-  .offer-dark .service, .offer-dark .service + .service { border-color: #627468; }
   .service h3 { margin-top: 20px; }
-  .method-band { grid-template-columns: 1fr; padding-top: 62px; padding-bottom: 62px; gap: 30px; }
-  .article-preview { grid-template-columns: 1fr; }
-  .article-feature { padding-right: 0; }
-  .article-side { border-left: 0; border-top: 1px solid #d5cdb9; padding: 24px 0; gap: 12px; }
   .contact-band { flex-direction: column; align-items: flex-start; }
   .footer { flex-direction: column; }
-  .insights-hero { padding-top: 56px; }
-  .insights-tools { align-items: flex-start; flex-direction: column; }
-  .insight-row { grid-template-columns: 1fr; gap: 9px; }
-  .insight-category { justify-self: start; grid-row: 1; }
-  .insight-date { grid-row: 2; }
-  .insight-content { grid-row: 3; }
-  .article-hero { padding-top: 45px; }
   .breadcrumbs { margin-bottom: 32px; }
-  .byline { flex-wrap: wrap; }
-  .article-layout { display: flex; flex-direction: column; gap: 45px; padding-top: 34px; }
-  .article-aside { position: static; border-left: 0; border-top: 1px solid #d5cdb9; padding: 24px 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }

@@ -39,7 +39,7 @@ export function Header() {
 
   return (
     <header className="topbar">
-      <Brand aria-label="HotelGTM home" onClick={close} />
+      <Brand onClick={close} />
       <button
         className="menu-toggle"
         aria-label={open ? 'Close navigation' : 'Open navigation'}
@@ -67,7 +67,7 @@ export function Header() {
           onClick={close}
           data-testid="link-contact-nav"
         >
-          Start a conversation <ArrowRight size={13} />
+          Send a brief <ArrowRight size={13} />
         </Link>
       </nav>
     </header>

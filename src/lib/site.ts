@@ -2,9 +2,9 @@ export const SITE_ORIGIN = 'https://hotelgtm.com';
 export const SITE_NAME = 'HotelGTM';
 export const CONTACT_EMAIL = 'hello@alderhospitality.com';
 
-export const DEFAULT_TITLE = 'HotelGTM | Hotel Ownership Intelligence & B2B GTM';
+export const DEFAULT_TITLE = 'HotelGTM | Hotel Ownership Data & B2B Go-to-Market';
 export const DEFAULT_DESCRIPTION =
-  'Reach hotel owners, management companies and executive decision-makers with verified hospitality data, tailored GTM playbooks and pipeline execution.';
+  'Hotel ownership data, management-company mapping and go-to-market support for B2B teams selling into hospitality. Know who owns, runs and signs.';
 
 /** Builds a mailto link; body lines are joined with newlines and URI-encoded. */
 export function mailto(subject: string, body?: string): string {
