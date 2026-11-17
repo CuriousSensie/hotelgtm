@@ -48,6 +48,9 @@ export type GraphPerson = {
   /** 1 = highest decision authority within the sample. */
   rank: number;
 };
+  /** Partly masked on purpose: the full value is what customers buy. */
+  email: string;
+  phone: string;
 
 export type GraphEntityKind = 'brand' | 'operator' | 'owner';
 
@@ -73,15 +76,15 @@ export const ownershipSamples: OwnershipSample[] = [
     hotel: { name: 'Hotel Calder', place: 'Savannah, GA', meta: '142 rooms · Upper upscale' },
     entities: [
       { kind: 'brand', role: 'Brand', name: 'Atlas Collection', note: 'Franchise agreement', people: [
-        { id: 'calder-b1', name: 'Priya Raman', title: 'Regional VP, Franchise Ops', authority: 'Brand standards', rank: 5 },
+        { id: 'calder-b1', name: 'Priya Raman', title: 'Regional VP, Franchise Ops', authority: 'Brand standards', rank: 5, email: 'p.rama••••@atlascoll••.com', phone: '+1 (404) •••-••18' },
       ] },
       { kind: 'operator', role: 'Management company', name: 'Northlight Hotel Management', note: 'Operates 14 hotels', people: [
-        { id: 'calder-o1', name: 'Marcus Oyelaran', title: 'Chief Operating Officer', authority: 'Budget owner', rank: 2 },
-        { id: 'calder-o2', name: 'Elena Brandt', title: 'General Manager', authority: 'Day-to-day lead', rank: 4 },
+        { id: 'calder-o1', name: 'Marcus Oyelaran', title: 'Chief Operating Officer', authority: 'Budget owner', rank: 2, email: 'm.oyel••••@northlight••.com', phone: '+1 (912) •••-••63' },
+        { id: 'calder-o2', name: 'Elena Brandt', title: 'General Manager', authority: 'Day-to-day lead', rank: 4, email: 'e.bran••••@northlight••.com', phone: '+1 (912) •••-••05' },
       ] },
       { kind: 'owner', role: 'Owner entity', name: 'Calder Street Holdings LLC', note: 'Held by Tidewater Hospitality Partners', people: [
-        { id: 'calder-w1', name: 'Dana Whitlock', title: 'Managing Partner', authority: 'Final approver', rank: 1 },
-        { id: 'calder-w2', name: 'Tomás Reyes', title: 'VP, Asset Management', authority: 'Evaluates vendors', rank: 3 },
+        { id: 'calder-w1', name: 'Dana Whitlock', title: 'Managing Partner', authority: 'Final approver', rank: 1, email: 'd.whit••••@tidewater••.com', phone: '+1 (912) •••-••47' },
+        { id: 'calder-w2', name: 'Tomás Reyes', title: 'VP, Asset Management', authority: 'Evaluates vendors', rank: 3, email: 't.reye••••@tidewater••.com', phone: '+1 (912) •••-••29' },
       ] },
     ],
   },
@@ -91,15 +94,15 @@ export const ownershipSamples: OwnershipSample[] = [
     hotel: { name: 'The Linden House', place: 'Austin, TX', meta: '88 rooms · Boutique lifestyle' },
     entities: [
       { kind: 'brand', role: 'Brand', name: 'Independent', note: 'Soft-brand affiliation only', people: [
-        { id: 'linden-b1', name: 'Jo Castellan', title: 'Director, Member Hotels', authority: 'Program contact', rank: 5 },
+        { id: 'linden-b1', name: 'Jo Castellan', title: 'Director, Member Hotels', authority: 'Program contact', rank: 5, email: 'j.cast••••@memberhot••.com', phone: '+1 (212) •••-••74' },
       ] },
       { kind: 'operator', role: 'Management company', name: 'Field & Finch Hospitality', note: 'Operates 6 hotels', people: [
-        { id: 'linden-o1', name: 'Amara Nwosu', title: 'President', authority: 'Final approver', rank: 1 },
-        { id: 'linden-o2', name: 'Caleb Stroud', title: 'Director of Operations', authority: 'Evaluates vendors', rank: 3 },
+        { id: 'linden-o1', name: 'Amara Nwosu', title: 'President', authority: 'Final approver', rank: 1, email: 'a.nwos••••@fieldfinch••.com', phone: '+1 (512) •••-••12' },
+        { id: 'linden-o2', name: 'Caleb Stroud', title: 'Director of Operations', authority: 'Evaluates vendors', rank: 3, email: 'c.stro••••@fieldfinch••.com', phone: '+1 (512) •••-••58' },
       ] },
       { kind: 'owner', role: 'Owner entity', name: 'Linden 4th Street LP', note: 'Held by Juniper Row Capital', people: [
-        { id: 'linden-w1', name: 'Rachel Imani', title: 'Principal', authority: 'Budget owner', rank: 2 },
-        { id: 'linden-w2', name: 'Owen Marsh', title: 'Asset Manager', authority: 'Reviews spend', rank: 4 },
+        { id: 'linden-w1', name: 'Rachel Imani', title: 'Principal', authority: 'Budget owner', rank: 2, email: 'r.iman••••@juniperrow••.com', phone: '+1 (512) •••-••91' },
+        { id: 'linden-w2', name: 'Owen Marsh', title: 'Asset Manager', authority: 'Reviews spend', rank: 4, email: 'o.mars••••@juniperrow••.com', phone: '+1 (512) •••-••36' },
       ] },
     ],
   },
@@ -109,15 +112,15 @@ export const ownershipSamples: OwnershipSample[] = [
     hotel: { name: 'Harbor & Vine Resort', place: 'Monterey, CA', meta: '236 rooms · Luxury resort' },
     entities: [
       { kind: 'brand', role: 'Brand', name: 'Solenne Hotels & Resorts', note: 'Brand-managed flag', people: [
-        { id: 'harbor-b1', name: 'Henrik Aalto', title: 'SVP, Procurement', authority: 'Evaluates vendors', rank: 3 },
+        { id: 'harbor-b1', name: 'Henrik Aalto', title: 'SVP, Procurement', authority: 'Evaluates vendors', rank: 3, email: 'h.aalt••••@solenne••.com', phone: '+1 (415) •••-••82' },
       ] },
       { kind: 'operator', role: 'Management company', name: 'Solenne Operating Co.', note: 'Operates 41 hotels', people: [
-        { id: 'harbor-o1', name: 'Lucia Ferrand', title: 'Area Managing Director', authority: 'Budget owner', rank: 2 },
-        { id: 'harbor-o2', name: 'Devon Park', title: 'Director of Engineering', authority: 'Day-to-day lead', rank: 5 },
+        { id: 'harbor-o1', name: 'Lucia Ferrand', title: 'Area Managing Director', authority: 'Budget owner', rank: 2, email: 'l.ferr••••@solenne••.com', phone: '+1 (831) •••-••40' },
+        { id: 'harbor-o2', name: 'Devon Park', title: 'Director of Engineering', authority: 'Day-to-day lead', rank: 5, email: 'd.park••••@solenne••.com', phone: '+1 (831) •••-••67' },
       ] },
       { kind: 'owner', role: 'Owner entity', name: 'Cannery Point REIT', note: 'Portfolio of 22 hotels', people: [
-        { id: 'harbor-w1', name: 'Simone Achterberg', title: 'Chief Investment Officer', authority: 'Final approver', rank: 1 },
-        { id: 'harbor-w2', name: 'Will Thackeray', title: 'Director, Capital Projects', authority: 'Reviews spend', rank: 4 },
+        { id: 'harbor-w1', name: 'Simone Achterberg', title: 'Chief Investment Officer', authority: 'Final approver', rank: 1, email: 's.acht••••@cannerypt••.com', phone: '+1 (415) •••-••23' },
+        { id: 'harbor-w2', name: 'Will Thackeray', title: 'Director, Capital Projects', authority: 'Reviews spend', rank: 4, email: 'w.thac••••@cannerypt••.com', phone: '+1 (415) •••-••54' },
       ] },
     ],
   },
