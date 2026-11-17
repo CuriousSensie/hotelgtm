@@ -138,3 +138,14 @@ body { overflow-wrap: break-word; }
   .dp-cad { grid-template-columns: minmax(0, 92px) repeat(8, minmax(0, 1fr)); gap: 4px; }
   .dp-log .dp-tag, .dp-contact .dp-tag { white-space: normal; max-width: 92px; text-align: center; border-radius: 9px; }
 }
+
+/* Decision-maker table on phones: rank | person, then email and phone under the name. */
+@media (max-width: 700px) {
+  .lp-dm-row { grid-template-columns: 20px minmax(0, 1fr); align-items: start; row-gap: 5px; padding: 11px 0; }
+  .lp-dm-row > .og-rank { margin-top: 1px; }
+  .lp-dm-authority, .lp-dm-head { display: none; }
+  .lp-dm-email, .lp-dm-phone { grid-column: 2; }
+  .lp-dm-email { grid-row: 2; }
+  .lp-dm-phone { grid-row: 3; }
+  .lp-dm-person > * { white-space: normal; }
+}

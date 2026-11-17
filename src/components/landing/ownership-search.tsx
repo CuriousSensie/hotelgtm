@@ -6,6 +6,8 @@ import { useEffect, useLayoutEffect, useRef, useState, type FormEvent } from 're
 
 import { ownershipSamples, type GraphEntityKind, type OwnershipSample } from '@/content/home';
 
+import { ContactChips, ContactPanel, type ContactChannel } from './contact-reveal';
+
 /**
  * Signature hero element: a search bar that types a hotel query, then (on Search)
  * docks into the corner while the hotel resolves into its ownership graph:
@@ -18,13 +20,13 @@ type Size = { width: number; height: number };
 const TYPE_INTERVAL_MS = 34;
 /** If the visitor does not press Search, run it for them after this long. */
 const AUTO_RUN_MS = 2800;
-const RESOLVE_MS = 1900;
+const RESOLVE_MS = 2400;
 /** Below this stage width the graph renders as the compact view instead of a tree. */
 const TREE_MIN_WIDTH = 860;
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const RESOLVE_STEPS = ['Matching the property', 'Tracing brand, operator and owner', 'Ranking people by decision authority'];
+const RESOLVE_STEPS = ['Matching the property', 'Tracing brand, operator and owner', 'Ranking people by decision authority', 'Verifying emails and direct dials'];
 
 /** Tree-layout positions, as percentages of the stage. */
 const HOTEL_POS = { x: 50, y: 21 };
@@ -83,17 +85,43 @@ function useElementSize<T extends HTMLElement>() {
 
 const KIND_LABEL: Record<GraphEntityKind, string> = { brand: 'Brand', operator: 'Operator', owner: 'Owner' };
 
+type OpenContact = { personId: string; channel: ContactChannel } | null;
+
+/** One contact open at a time across the graph; Escape or a click elsewhere closes it. */
+function useOpenContact() {
+  const [open, setOpen] = useState<OpenContact>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(null);
+    };
+    const onPointer = (event: PointerEvent) => {
+      if (!(event.target instanceof Element) || !event.target.closest('.ct-panel, .ct-chip')) setOpen(null);
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+    };
+  }, [open]);
+  const channelFor = (personId: string) => (open?.personId === personId ? open.channel : null);
+  const toggle = (personId: string, channel: ContactChannel) =>
+    setOpen((current) => (current?.personId === personId && current.channel === channel ? null : { personId, channel }));
+  return { channelFor, toggle };
+}
+
 /**
- * Narrow-stage version of the graph: hotel, then its three entities as tappable tiles, then a short ranked
- * list of people. Tapping an entity filters the list to that firm. Keeps the tree's story at a fraction of the height.
+ * Narrow-stage version of the graph: hotel, then its three entities as tappable tiles, then the ranked list
+ * of people, each with email/phone buttons that open a contact drawer. Tapping an entity filters the list to that firm.
  */
 function CompactGraph({ sample }: { sample: OwnershipSample }) {
   const [focus, setFocus] = useState<GraphEntityKind | null>(null);
+  const contact = useOpenContact();
   const people = sample.entities
     .filter((entity) => focus === null || entity.kind === focus)
     .flatMap((entity) => entity.people.map((person) => ({ ...person, kind: entity.kind })))
-    .sort((a, b) => a.rank - b.rank)
-    .slice(0, 3);
+    .sort((a, b) => a.rank - b.rank);
 
   return (
     <motion.div className="og-graph og-compact" initial={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.2 } }}>
@@ -127,22 +155,42 @@ function CompactGraph({ sample }: { sample: OwnershipSample }) {
       </div>
 
       <ol className="og-compact-people" aria-live="polite">
-        {people.map((person, index) => (
-          <motion.li
-            key={person.id}
-            className={`og-node og-person${person.rank === 1 ? ' is-top' : ''}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: (focus === null ? 0.85 : 0) + index * 0.08, ease: EASE }}
-          >
-            <span className="og-rank" aria-label={`Decision authority rank ${person.rank}`}>{person.rank}</span>
-            <span className="og-person-body">
-              <strong>{person.name}</strong>
-              <span className="og-sub">{person.title}</span>
-            </span>
-            <span className="og-compact-tag">{KIND_LABEL[person.kind]}</span>
-          </motion.li>
-        ))}
+        {people.map((person, index) => {
+          const channel = contact.channelFor(person.id);
+          const panelId = `ct-${person.id}`;
+          return (
+            <motion.li
+              key={person.id}
+              className="og-compact-person"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: (focus === null ? 0.85 : 0) + index * 0.08, ease: EASE }}
+            >
+              <div className={`og-node og-person${person.rank === 1 ? ' is-top' : ''}`}>
+                <span className="og-rank" aria-label={`Decision authority rank ${person.rank}`}>{person.rank}</span>
+                <span className="og-person-body">
+                  <strong>{person.name}</strong>
+                  <span className="og-sub">{person.title} · {KIND_LABEL[person.kind]}</span>
+                </span>
+                <ContactChips person={person} open={channel} onToggle={(next) => contact.toggle(person.id, next)} iconOnly pulse={person.rank === 1} controls={panelId} />
+              </div>
+              <AnimatePresence initial={false}>
+                {channel && (
+                  <motion.div
+                    key="drawer"
+                    className="og-contact-drawer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: EASE }}
+                  >
+                    <ContactPanel id={panelId} person={person} channel={channel} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.li>
+          );
+        })}
       </ol>
     </motion.div>
   );
@@ -153,6 +201,7 @@ type GraphProps = { sample: OwnershipSample; size: Size };
 /** Wide-stage graph: nodes pinned to stage percentages, joined by elbow connectors. */
 function OwnershipGraph({ sample, size }: GraphProps) {
   const [hovered, setHovered] = useState<string | null>(null);
+  const contact = useOpenContact();
   const edges = buildEdges(sample);
 
   const entityOfPerson = (personId: string) =>
@@ -221,25 +270,54 @@ function OwnershipGraph({ sample, size }: GraphProps) {
               <span className="og-sub">{entity.note}</span>
             </motion.div>
           </div>
-          {entity.people.map((person, personIndex) => (
-            <div className="og-pos og-pos-person" key={person.id} style={place(PEOPLE_X[entity.kind][personIndex], PEOPLE_Y)}>
-              <motion.div
-                className={`og-node og-person${person.rank === 1 ? ' is-top' : ''}`}
-                tabIndex={0}
-                {...hoverProps(person.id)}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 1.6 + (person.rank - 1) * 0.13, ease: EASE }}
-              >
-                <span className="og-rank" aria-label={`Decision authority rank ${person.rank}`}>{person.rank}</span>
-                <span className="og-person-body">
-                  <strong>{person.name}</strong>
-                  <span className="og-sub">{person.title}</span>
-                  <span className="og-authority">{person.authority}</span>
-                </span>
-              </motion.div>
-            </div>
-          ))}
+          {entity.people.map((person, personIndex) => {
+            const x = PEOPLE_X[entity.kind][personIndex];
+            const channel = contact.channelFor(person.id);
+            const panelId = `ct-${person.id}`;
+            const delay = 1.6 + (person.rank - 1) * 0.13;
+            return (
+              <div className="og-pos og-pos-person" key={person.id} style={place(x, PEOPLE_Y)} data-open={channel !== null}>
+                <AnimatePresence>
+                  {channel && (
+                    <motion.div
+                      key="pop"
+                      className="og-contact-pop"
+                      data-align={x < 22 ? 'start' : x > 80 ? 'end' : 'center'}
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.97, transition: { duration: 0.15 } }}
+                      transition={{ duration: 0.3, ease: EASE }}
+                    >
+                      <ContactPanel id={panelId} person={person} channel={channel} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <motion.div
+                  className={`og-node og-person${person.rank === 1 ? ' is-top' : ''}`}
+                  tabIndex={0}
+                  {...hoverProps(person.id)}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay, ease: EASE }}
+                >
+                  <span className="og-rank" aria-label={`Decision authority rank ${person.rank}`}>{person.rank}</span>
+                  <span className="og-person-body">
+                    <strong>{person.name}</strong>
+                    <span className="og-sub">{person.title}</span>
+                    <span className="og-authority">{person.authority}</span>
+                  </span>
+                  <motion.span
+                    className="og-person-contacts"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: delay + 0.55, ease: EASE }}
+                  >
+                    <ContactChips person={person} open={channel} onToggle={(next) => contact.toggle(person.id, next)} pulse={person.rank === 1} controls={panelId} />
+                  </motion.span>
+                </motion.div>
+              </div>
+            );
+          })}
         </div>
       ))}
     </motion.div>
@@ -404,7 +482,7 @@ export function OwnershipSearch() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, delay: 2.3 }}
             >
-              <span className="og-legend-note"><i className="og-rank">1</i> Ranked by decision authority · Sample record, illustrative data</span>
+              <span className="og-legend-note"><i className="og-rank">1</i> Ranked by decision authority · Verified email + direct dial · Illustrative</span>
               <span className="og-legend-more">
                 {ownershipSamples.map((option, index) => (
                   index !== sampleIndex && (
