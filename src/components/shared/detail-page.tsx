@@ -1,6 +1,10 @@
-import { ArrowDownRight, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
+import { DetailSteps } from '@/components/detail/detail-steps';
+import { HeroNotes, type NotesGroup } from '@/components/detail/hero-notes';
+import { vignettePlan } from '@/components/detail/vignette-map';
+import { Reveal } from '@/components/landing/reveal';
+import { ownershipSamples } from '@/content/home';
 import type { DetailPageContent } from '@/content/types';
 import { breadcrumbList, websiteRef } from '@/lib/schema';
 import { SITE_ORIGIN, mailto } from '@/lib/site';
@@ -8,7 +12,6 @@ import { SITE_ORIGIN, mailto } from '@/lib/site';
 import { Breadcrumbs, type Crumb } from './breadcrumbs';
 import { BriefContactBand } from './contact-band';
 import { JsonLd } from './json-ld';
-import { RelatedLinks } from './related-links';
 
 type DetailPageProps = {
   content: DetailPageContent;
@@ -18,24 +21,37 @@ type DetailPageProps = {
 };
 
 const copy = {
-  service: {
-    asideLead: 'Market',
-    introEyebrow: 'The work, in sequence',
-    introHeading: 'Define the scope before research starts.',
-    introCopy: 'Agree the market, fields and level of research before work begins.',
-  },
-  audience: {
-    asideLead: 'Property',
-    introEyebrow: 'A practical use case',
-    introHeading: 'Use hotel research to choose your next step.',
-    introCopy: 'The research and go-to-market support are scoped to the decision your team needs to make.',
-  },
+  service: { asideLead: 'Market', introHeading: 'Agree the scope. Then do the work.' },
+  audience: { asideLead: 'Property', introHeading: 'From market map to first conversation.' },
 } as const;
+
+/** Fills the hero card's market, group and people chain from one invented demo record. */
+function heroGroups(sampleIndex: number, variant: DetailPageProps['variant']): NotesGroup[] {
+  const sample = ownershipSamples[sampleIndex % ownershipSamples.length];
+  const [, operator, owner] = sample.entities;
+  const segment = sample.hotel.meta.split(' · ')[1] ?? sample.hotel.meta;
+  const people = sample.entities
+    .flatMap((entity) => entity.people)
+    .sort((a, b) => a.rank - b.rank)
+    .slice(0, 3);
+
+  return [
+    {
+      label: copy[variant].asideLead,
+      rows: [variant === 'service'
+        ? { name: sample.hotel.place, sub: segment }
+        : { name: sample.hotel.name, sub: sample.hotel.place }],
+    },
+    { label: '→ group', rows: [owner, operator].map((entity) => ({ name: entity.name, sub: entity.role })) },
+    { label: '→ people', rows: people.map((person) => ({ name: person.name, sub: person.authority, rank: person.rank })) },
+  ];
+}
 
 /** Shared template for service pages and use-case (audience) pages. */
 export function DetailPage({ content, variant, contactAudience = 'team' }: DetailPageProps) {
   const isAudience = variant === 'audience';
   const text = copy[variant];
+  const plan = vignettePlan(content.path);
   const trail: Crumb[] = isAudience
     ? [{ label: 'Use cases', href: '/use-cases' }, { label: content.eyebrow }]
     : [{ label: content.eyebrow }];
@@ -55,48 +71,32 @@ export function DetailPage({ content, variant, contactAudience = 'team' }: Detai
   };
 
   return (
-    <>
+    <div className="lp">
       <JsonLd data={schema} />
-      <header className="service-hero">
-        <Breadcrumbs items={trail} />
-        <div className="service-hero-grid">
-          <div>
-            <span className="eyebrow">{content.eyebrow}</span>
-            <h1>{content.heading.lead}<br /><em>{content.heading.emphasis}</em></h1>
-            <p>{content.lede}</p>
-            <div className="hero-actions">
-              <a className="button-primary" href={mailto('Hospitality intelligence inquiry')}>Discuss your brief <ArrowRight size={15} /></a>
-              {isAudience && <Link href="/use-cases" className="text-link">All use cases <ArrowDownRight size={14} /></Link>}
+      <header className="dp-hero">
+        <div className="lp-wrap">
+          <Breadcrumbs items={trail} />
+          <div className="dp-hero-grid">
+            <div className="dp-hero-copy lp-rise">
+              <h1>{content.heading.lead}<br /><em>{content.heading.emphasis}</em></h1>
+              <p>{content.lede}</p>
+              <div className="lp-actions">
+                <a className="lp-button" href={mailto('HotelGTM commercial inquiry')}>Send a brief <ArrowRight size={15} /></a>
+              </div>
             </div>
-          </div>
-          <div className="service-hero-aside" aria-hidden="true">
-            <span>HOTELGTM / MARKET NOTES</span>
-            <strong>{text.asideLead}<br />→ group<br />→ people</strong>
-            <small>Scope the question.<br />Map what matters.</small>
+            <HeroNotes bar="HOTELGTM / ACCOUNT MAP" groups={heroGroups(plan.sample, variant)} />
           </div>
         </div>
       </header>
-      <section className="service-detail-section">
-        <div className="service-detail-intro">
-          <span className="eyebrow">{text.introEyebrow}</span>
-          <h2>{text.introHeading}</h2>
-          <p>{text.introCopy}</p>
-        </div>
-        <div className="detail-list">
-          {content.sections.map((section) => (
-            <article className="detail-row" key={section.number}>
-              <span className="service-number">{section.number}</span>
-              <div>
-                <h3>{section.title}</h3>
-                <p>{section.copy}</p>
-                <ul>{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
-              </div>
-            </article>
-          ))}
+      <section className="lp-section lp-section-tint dp-sequence">
+        <div className="lp-wrap">
+          <Reveal className="lp-heading">
+            <h2>{text.introHeading}</h2>
+          </Reveal>
+          <DetailSteps sections={content.sections} kinds={plan.kinds} sample={plan.sample} />
         </div>
       </section>
-      <RelatedLinks eyebrow="Continue exploring" heading="Related data and services." links={content.related} />
       <BriefContactBand audience={contactAudience} />
-    </>
+    </div>
   );
 }

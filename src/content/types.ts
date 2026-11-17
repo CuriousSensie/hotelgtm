@@ -7,8 +7,7 @@ export type DetailPageContent = {
   /** Rendered as `{lead}<br /><em>{emphasis}</em>`. */
   heading: { lead: string; emphasis: string };
   lede: string;
-  sections: { number: string; title: string; copy: string; bullets: string[] }[];
-  related: { label: string; href: string; description: string }[];
+  sections: { number: string; title: string; copy: string }[];
 };
 
 export type UseCaseContent = DetailPageContent & {
