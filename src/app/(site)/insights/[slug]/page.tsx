@@ -1,17 +1,40 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowRight, CalendarDays, Clock } from 'lucide-react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { ArticleToc, type TocItem } from '@/components/insights/article-toc';
+import { FaqAccordion } from '@/components/insights/faq-accordion';
+import { InsightCard, type InsightSummary } from '@/components/insights/insight-card';
+import { ReadingProgress } from '@/components/insights/reading-progress';
+import { Reveal } from '@/components/landing/reveal';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
-import { SalesContactBand } from '@/components/shared/contact-band';
 import { JsonLd } from '@/components/shared/json-ld';
-import { articles, getArticle } from '@/content/articles';
+import { articles, getArticle, type Article } from '@/content/articles';
 import { formatLongDate } from '@/lib/format';
 import { buildMetadata } from '@/lib/metadata';
 import { SITE_ORIGIN, mailto } from '@/lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
+
+const BODY_ID = 'article-body';
+const FAQ_ID = 'frequently-asked-questions';
+
+const toAnchor = (heading: string) => heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+const toSummary = ({ slug, title, deck, category, publishedAt, read }: Article): InsightSummary => ({
+  slug,
+  title,
+  deck,
+  category,
+  date: formatLongDate(publishedAt),
+  read,
+});
+
+/** The other guides, starting with the one that follows the current article. */
+function otherArticles(current: Article): Article[] {
+  const index = articles.indexOf(current);
+  return [...articles.slice(index + 1), ...articles.slice(0, index)].slice(0, 3);
+}
 
 export const dynamicParams = false;
 
@@ -43,57 +66,73 @@ export default async function ArticlePage({ params }: Props) {
     mainEntityOfPage: `${SITE_ORIGIN}/insights/${article.slug}`,
   };
 
+  const toc: TocItem[] = article.sections.map((section) => ({ id: toAnchor(section.heading), label: section.heading }));
+  if (article.faq) toc.push({ id: FAQ_ID, label: 'Frequently asked questions' });
+  const more = otherArticles(article);
+
   return (
-    <>
+    <div className="lp in-article">
       <JsonLd data={schema} />
-      <header className="article-hero">
-        <Breadcrumbs items={[{ label: 'Insights', href: '/insights' }, { label: article.category }]} />
-        <span className="eyebrow">{article.category}</span>
-        <h1>{article.title}</h1>
-        <p className="article-deck">{article.deck}</p>
-        <div className="byline">
-          <span>By HotelGTM Research</span>
-          <span>{formatLongDate(article.publishedAt)}</span>
-          <span>{article.read}</span>
-          <span>Editorial perspective</span>
+      <ReadingProgress targetId={BODY_ID} />
+
+      <header className="in-article-hero">
+        <div className="lp-wrap lp-rise">
+          <Breadcrumbs items={[{ label: 'Insights', href: '/insights' }, { label: article.category }]} />
+          <h1>{article.title}</h1>
+          <p className="in-article-deck">{article.deck}</p>
+          <ul className="in-byline">
+            <li><span className="in-byline-mark" aria-hidden="true">H</span>By HotelGTM Research</li>
+            <li><CalendarDays size={13} aria-hidden="true" />{formatLongDate(article.publishedAt)}</li>
+            <li><Clock size={13} aria-hidden="true" />{article.read}</li>
+          </ul>
         </div>
       </header>
-      <div className="article-layout">
-        <article className="article-body">
-          <p><strong>{article.intro}</strong></p>
-          <section className="takeaways">
-            <h2>Key takeaways</h2>
-            <ul>{article.takeaways.map((takeaway) => <li key={takeaway}>{takeaway}</li>)}</ul>
-          </section>
-          {article.sections.map((section) => (
-            <section key={section.heading}>
-              <h2>{section.heading}</h2>
+
+      <div className="lp-wrap in-article-layout">
+        <article className="in-prose" id={BODY_ID}>
+          <p className="in-lead">{article.intro}</p>
+
+          {article.sections.map((section, index) => (
+            <section key={section.heading} className="in-prose-section">
+              <span className="in-section-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <h2 id={toAnchor(section.heading)}>{section.heading}</h2>
               {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-              {section.bullets && <ul>{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
+              {section.bullets && <ul className="in-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
             </section>
           ))}
+
           {article.faq && (
-            <section className="faq">
-              <h2>Frequently asked questions</h2>
-              {article.faq.map((item) => (
-                <div className="faq-item" key={item.question}>
-                  <h3>{item.question}</h3>
-                  <p>{item.answer}</p>
-                </div>
-              ))}
+            <section className="in-prose-section in-faq-section">
+              <h2 id={FAQ_ID}>Frequently asked questions</h2>
+              <FaqAccordion items={article.faq} />
             </section>
           )}
-          <Link href="/insights" className="back-link"><ArrowLeft size={14} /> Back to all insights</Link>
         </article>
-        <aside className="article-aside">
-          <span>Relevant to your work</span>
-          <h3>Put the insight to work.</h3>
-          <p>Explore HotelGTM’s market mapping, ownership and decision-maker intelligence, GTM playbooks and pipeline execution.</p>
-          <a href={mailto('HotelGTM commercial inquiry')}>Discuss a market question <ArrowRight size={13} /></a>
-          <Link href="/#services">View services</Link>
-        </aside>
+
+        <div className="in-rail">
+          <ArticleToc items={toc} />
+          <aside className="in-cta">
+            <h3>Have us map your market.</h3>
+            <p>We do this research for B2B teams selling into hotels, then turn it into pipeline.</p>
+            <a className="lp-button lp-button-brass" href={mailto('HotelGTM commercial inquiry')}>Email us your market <ArrowRight size={14} /></a>
+          </aside>
+        </div>
       </div>
-      <SalesContactBand />
-    </>
+
+      <section className="lp-section lp-section-tint in-more">
+        <div className="lp-wrap">
+          <Reveal className="in-more-head">
+            <h2>Keep reading</h2>
+          </Reveal>
+          <div className="in-grid">
+            {more.map((item, index) => (
+              <Reveal key={item.slug} className="in-grid-cell" delay={index * 0.07}>
+                <InsightCard item={toSummary(item)} headingLevel="h3" />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
