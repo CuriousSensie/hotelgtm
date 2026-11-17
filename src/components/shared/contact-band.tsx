@@ -25,10 +25,10 @@ function ContactBand({ heading, copy, ctaLabel, ctaHref }: ContactBandProps) {
 export function SalesContactBand() {
   return (
     <ContactBand
-      heading="Tell us who you sell to. We’ll map who decides."
-      copy="Send your market and hotel audience. We’ll reply with a proposed scope."
-      ctaLabel="Send your target market"
-      ctaHref={mailto('HotelGTM commercial inquiry', 'Hello HotelGTM,\n\nWhat we sell:\nOur target hotel audience:\n')}
+      heading="Tell us who you sell to. We’ll send who decides, and how to reach them."
+      copy="Send your market and hotel audience. We’ll reply with sample contacts and a proposed scope."
+      ctaLabel="Get sample contacts"
+      ctaHref={mailto('HotelGTM sample contacts', 'Hello HotelGTM,\n\nWhat we sell:\nOur target hotel audience:\n')}
     />
   );
 }

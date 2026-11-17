@@ -3,7 +3,7 @@
 export const hero = {
   eyebrow: 'Hotel ownership data + B2B go-to-market',
   title: 'Reach hotel owners, operators and the people who sign.',
-  lede: 'Brand, management company and owner are often three different firms. We map which one decides, research the people there, and build the outbound plan to reach them.',
+  lede: 'Brand, management company and owner are often three different firms. We map which one decides, research the people there with verified emails and direct dials, and build the outbound plan to reach them.',
   primaryCta: { label: 'Scope your target market', subject: 'HotelGTM commercial inquiry' },
   secondaryCta: { label: 'Read the field guides', href: '/insights' },
 };
@@ -20,7 +20,7 @@ export const services = {
   title: ['Know the account.', 'Build the pipeline.'],
   copy: 'Data, playbooks and pipeline help. Use one service or all three.',
   items: [
-    { label: 'Intelligence', title: 'Hotel Ownership & Management Data', copy: 'Every target hotel mapped to its owner, operator and brand, plus the people who decide.', link: { label: 'How the data is built', href: '/data' } },
+    { label: 'Intelligence', title: 'Hotel Ownership & Management Data', copy: 'Every target hotel mapped to its owner, operator and brand, plus the people who decide, with verified email and direct dial.', link: { label: 'How the data is built', href: '/data' } },
     { label: 'Strategy', title: 'Outbound B2B Go-to-Market Playbooks', copy: 'Positioning, messaging and sequences written for how hotels buy.', link: { label: 'How playbooks are built', href: '/go-to-market' } },
     { label: 'Execution', title: 'Account-Based Pipeline Execution', copy: 'Sales-engine setup and fractional GTM leadership for hotel pipeline.', link: { label: 'How we run pipeline', href: '/pipeline-execution' } },
   ] satisfies OfferItem[],
@@ -34,6 +34,7 @@ export const dataOffer = {
     { label: 'Properties', title: 'Target property lists', copy: 'The universe set by geography, segment and room count.' },
     { label: 'Ownership', title: 'Owner, operator and brand', copy: 'Each hotel linked to its owner, operator and flag, rolled up to parent groups.' },
     { label: 'Buyers', title: 'Decision-maker research', copy: 'The people who hold the budget, evaluate vendors or sign off.' },
+    { label: 'Contacts', title: 'Verified contact details', copy: 'Verified email and direct dial for every decision-maker.' },
   ] satisfies OfferItem[],
 };
 
@@ -47,10 +48,10 @@ export type GraphPerson = {
   authority: string;
   /** 1 = highest decision authority within the sample. */
   rank: number;
-};
   /** Partly masked on purpose: the full value is what customers buy. */
   email: string;
   phone: string;
+};
 
 export type GraphEntityKind = 'brand' | 'operator' | 'owner';
 
